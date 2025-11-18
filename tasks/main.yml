@@ -1,3 +1,41 @@
-#SPDX-License-Identifier: MIT-0
 ---
-# tasks file for waal70.immich
+# This include_vars allows you to keep your vaulted variables outside of your main repo
+# It assumes the PRIVATE_REPO environment variable is set to the path of your private repo
+# On home-infra, this is done by firstrun.sh.
+# However, this role will not break if you do not have these
+- name: Include vaulted password file
+  ansible.builtin.include_vars:
+    file: "{{ item }}"
+  with_first_found:
+    - files:
+        - "{{ lookup('env', 'PRIVATE_REPO') | default('~') }}/ansible-vault/{{ ansible_role_name }}-vars.yml"
+      skip: true
+
+- name: "Template the immich.yml file to the role's files/ directory"
+  ansible.builtin.template:
+    src: immich.yml.j2
+    dest: "{{ role_path }}/files/immich.yml"
+    owner: "{{ interactive_user }}"
+    group: "{{ interactive_user }}"
+    mode: '0644'
+    force: true
+  delegate_to: localhost
+
+- name: "Include role to deploy immich-stack to Portainer"
+  ansible.builtin.include_role:
+    name: waal70.portainer
+  vars:
+    stack_list:
+      - name: immich
+        file: immich.yml # file is in files/ of this role
+
+- name: "Return the immich yaml back to its placeholder version"
+  ansible.builtin.copy:
+    src: immich.yml.placeholder
+    dest: "{{ role_path }}/files/immich.yml"
+    owner: "{{ interactive_user }}"
+    group: "{{ interactive_user }}"
+    mode: '0644'
+    remote_src: false
+    force: true
+  delegate_to: localhost

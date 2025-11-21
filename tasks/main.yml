@@ -11,6 +11,13 @@
         - "{{ lookup('env', 'PRIVATE_REPO') | default('~') }}/ansible-vault/{{ ansible_role_name }}-vars.yml"
       skip: true
 
+- name: "Ensure ntfs-3g is present in order to support import from NTFS formatted drives"
+  ansible.builtin.apt:
+    name:
+      - ntfs-3g
+    state: present
+    update_cache: true
+
 - name: "Template the immich.yml file to the role's files/ directory"
   ansible.builtin.template:
     src: immich.yml.j2
@@ -39,3 +46,9 @@
     remote_src: false
     force: true
   delegate_to: localhost
+
+- name: "Include role to create NFS shares for Immich"
+  ansible.builtin.include_role:
+    name: waal70.nfs
+  vars:
+    nfs_exports: ['{{ immich_media_root }} 172.16.10.2(rw,sync,no_subtree_check,no_root_squash)']

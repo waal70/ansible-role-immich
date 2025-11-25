@@ -30,6 +30,9 @@ services:
       disable: false
     environment:
       TZ: Europe/Amsterdam
+    networks:
+      - default
+      - immich_network
 
   immich-machine-learning:
     container_name: immich_machine_learning
@@ -44,6 +47,8 @@ services:
     restart: always
     healthcheck:
       disable: false
+    networks:
+      - immich_network
 
   redis:
     container_name: immich_redis
@@ -51,6 +56,8 @@ services:
     healthcheck:
       test: redis-cli ping || exit 1
     restart: always
+    networks:
+      - immich_network
 
   database:
     container_name: immich_postgres
@@ -67,5 +74,13 @@ services:
       - /data/immich/pgdata:/var/lib/postgresql/data
     shm_size: 128mb
     restart: always
+    networks:
+      - immich_network
 volumes:
   model-cache:
+networks:
+  default:
+    external: true
+    name: reverse-proxy
+  immich_network:
+    name: immich

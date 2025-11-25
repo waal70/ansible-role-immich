@@ -33,6 +33,11 @@ services:
     networks:
       - default
       - immich_network
+    # For systems with limited CPU resources, you can limit the CPU usage of the Immich server container.
+    deploy:
+      resources:
+        limits:
+          cpus: '2.00'
 
   immich-machine-learning:
     container_name: immich_machine_learning
@@ -49,6 +54,11 @@ services:
       disable: false
     networks:
       - immich_network
+    # For systems with limited CPU resources, you can limit the CPU usage of the Immich machine learning container.
+    deploy:
+      resources:
+        limits:
+          cpus: '1.00'
 
   redis:
     container_name: immich_redis

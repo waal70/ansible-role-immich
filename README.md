@@ -33,6 +33,15 @@ Be patient for a while, as the screen will flash ```ALTER TABLE``` and ```CREATE
 
 Now start the other containers. Once they are all 'healthy', go ahead and login to your new and fresh Immich!
 
+## Upload through immich upload
+
+Open a console in Portainer and:
+
+```bash
+immich login http://localhost:2283 <API-key>
+immich upload -R <foldername> --delete
+```
+
 ## Tasks in Role
 
 Work in progress!

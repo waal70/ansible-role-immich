@@ -39,7 +39,7 @@ Open a console in Portainer and:
 
 ```bash
 immich login http://localhost:2283 <API-key>
-immich upload -R <foldername> --delete
+immich upload -r <foldername> --delete
 ```
 
 ## Tasks in Role

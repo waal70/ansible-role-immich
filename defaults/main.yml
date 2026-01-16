@@ -1,3 +1,4 @@
 ---
 # defaults file for waal70.immich
 immich_media_root: "/media/immich"
+immich_app_root: "/appdata/immich"

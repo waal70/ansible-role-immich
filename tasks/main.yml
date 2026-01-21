@@ -47,6 +47,45 @@
     force: true
   delegate_to: localhost
 
+- name: "Create an additional folder under media root to stage images for import"
+  ansible.builtin.file:
+    path: "{{ immich_media_root }}/todo"
+    mode: '0777'
+    state: directory
+
+- name: "Set fact for user to run docker exec under and API key file"
+  ansible.builtin.set_fact:
+    docker_exec_user: "{{ ansible_env.SUDO_USER | default(ansible_env.USER, true) | default(ansible_user_id, true) }}"
+    immich_api_keyfile: "{{ immich_media_root }}/.api"
+
+- name: "Ensure the API-key is present"
+  ansible.builtin.copy:
+    content: "{{ immich_api_key }}"
+    dest: "{{ immich_api_keyfile }}"
+    owner: "{{ docker_exec_user }}"
+    group: "{{ docker_exec_user }}"
+    mode: "0600"
+  when: immich_api_key != 'NOTSET'
+
+- name: "Template out the import batch-file to the media root"
+  ansible.builtin.template:
+    src: import_todo.sh.j2
+    dest: "{{ immich_media_root }}/import_todo.sh"
+    owner: "{{ docker_exec_user }}"
+    group: "{{ docker_exec_user }}"
+    mode: '0744'
+  when: immich_api_key != 'NOTSET'
+
+- name: "Schedule a regular import of files in todo in cron"
+  ansible.builtin.cron:
+    name: "immich image import"
+    minute: "0"
+    hour: "2"
+    user: "{{ docker_exec_user }}"
+    job: "{{ immich_media_root }}/import_todo.sh >> /home/{{ docker_exec_user }}/crontab.log 2>&1"
+    state: "present"
+  when: immich_api_key != 'NOTSET'
+
 - name: "Include role to create NFS shares for Immich"
   ansible.builtin.include_role:
     name: waal70.nfs

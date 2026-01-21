@@ -2,3 +2,5 @@
 # defaults file for waal70.immich
 immich_media_root: "/media/immich"
 immich_app_root: "/appdata/immich"
+immich_import_command: ""
+immich_api_key: "NOTSET"

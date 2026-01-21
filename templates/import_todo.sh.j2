@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# {{ ansible_managed }}
+
+# Common variables.
+# Please note that SRC should refer to the container's volume mapping
+SRC="/data/todo"
+
+DOCKER_CMD="/usr/bin/docker exec -t immich_server immich"
+
+# First, ensure there is a valid login token
+$DOCKER_CMD login http://localhost:2283 $(< {{ immich_api_keyfile }})
+# Then, proceed with upload
+$DOCKER_CMD upload -r $SRC --delete

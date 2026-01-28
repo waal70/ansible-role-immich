@@ -55,7 +55,7 @@
 
 - name: "Set fact for user to run docker exec under and API key file"
   ansible.builtin.set_fact:
-    docker_exec_user: "{{ ansible_env.SUDO_USER | default(ansible_env.USER, true) | default(ansible_user_id, true) }}"
+    docker_exec_user: "{{ ansible_facts['env'].SUDO_USER | default(ansible_facts['env'].USER, true) | default(ansible_facts['user_id'], true) }}"
     immich_api_keyfile: "{{ immich_media_root }}/.api"
 
 - name: "Ensure the API-key is present"

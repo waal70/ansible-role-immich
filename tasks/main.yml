@@ -36,17 +36,6 @@
       - name: immich
         file: immich.yml # file is in files/ of this role
 
-- name: "Return the immich yaml back to its placeholder version"
-  ansible.builtin.copy:
-    src: immich.yml.placeholder
-    dest: "{{ role_path }}/files/immich.yml"
-    owner: "{{ interactive_user }}"
-    group: "{{ interactive_user }}"
-    mode: '0644'
-    remote_src: false
-    force: true
-  delegate_to: localhost
-
 - name: "Create an additional folder under media root to stage images for import"
   ansible.builtin.file:
     path: "{{ immich_media_root }}/todo"

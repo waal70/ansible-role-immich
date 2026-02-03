@@ -8,7 +8,7 @@
     file: "{{ item }}"
   with_first_found:
     - files:
-        - "{{ lookup('env', 'PRIVATE_REPO') | default('~') }}/{{ ansible_vault }}/{{ ansible_role_name }}-vars.yml"
+        - "{{ private_repo }}/{{ ansible_vault }}/{{ ansible_role_name }}-vars.yml"
       skip: true
 
 - name: "Ensure ntfs-3g is present in order to support import from NTFS formatted drives"

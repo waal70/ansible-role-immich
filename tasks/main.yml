@@ -79,4 +79,4 @@
   ansible.builtin.include_role:
     name: waal70.nfs
   vars:
-    nfs_exports: ['{{ immich_media_root }} 172.16.10.2(rw,sync,no_subtree_check,no_root_squash)']
+    nfs_exports: ['{{ immich_media_root }} {{ immich_nfs_allowedclients }}{{ immich_nfs_options }}']

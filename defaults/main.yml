@@ -4,3 +4,6 @@ immich_media_root: "/media/immich"
 immich_app_root: "/appdata/immich"
 immich_import_command: ""
 immich_api_key: "NOTSET"
+
+immich_nfs_options: "(rw,sync,no_subtree_check,no_root_squash)"
+immich_nfs_allowedclients: "1.2.3.4"

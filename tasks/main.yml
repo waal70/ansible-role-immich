@@ -18,10 +18,10 @@
     state: present
     update_cache: true
 
-- name: "Template the immich.yml file to the role's files/ directory"
+- name: "Template the service compose file to the role's files/ directory for {{ service_name }}"
   ansible.builtin.template:
-    src: immich.yml.j2
-    dest: "{{ role_path }}/files/immich.yml"
+    src: "{{ service_name }}.yml.j2"
+    dest: "{{ role_path }}/files/{{ service_name }}.yml"
     owner: "{{ interactive_user }}"
     group: "{{ interactive_user }}"
     mode: '0644'
@@ -79,4 +79,4 @@
   ansible.builtin.include_role:
     name: waal70.nfs
   vars:
-    nfs_exports: ['{{ immich_media_root }} {{ immich_nfs_allowedclients }}{{ immich_nfs_options }}']
+    nfs_exports: ['/media/immich {{ immich_nfs_allowedclients }}{{ immich_nfs_options }}']

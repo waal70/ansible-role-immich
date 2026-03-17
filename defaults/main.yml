@@ -1,9 +1,14 @@
 ---
 # defaults file for waal70.immich
-immich_media_root: "/media/immich"
-immich_app_root: "/appdata/immich"
+immich_media_root: "{{ service_media }}"
+immich_app_root: "{{ service_data }}"
 immich_import_command: ""
 immich_api_key: "NOTSET"
 
 immich_nfs_options: "(rw,sync,no_subtree_check,no_root_squash)"
 immich_nfs_allowedclients: "1.2.3.4"
+
+# These should be overriden from your site's group_vars/all.yml
+service_data: "fixme"
+service_db: "fixmetoo"
+service_name: "forgottooverride"

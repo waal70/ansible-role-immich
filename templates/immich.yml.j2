@@ -33,7 +33,7 @@ services:
     healthcheck:
       disable: false
     environment:
-      TZ: Europe/Amsterdam
+      TZ: {{ site_timezone }}
     networks:
       - default
       - immich_network
